@@ -32,6 +32,12 @@ class _EventDetailPageState extends State<EventDetailPage> with SingleTickerProv
   }
 
   @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ScaleTransition(
       scale: scale,

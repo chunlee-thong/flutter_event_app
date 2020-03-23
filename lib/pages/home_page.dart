@@ -47,6 +47,13 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
   }
 
   @override
+  void dispose() {
+    controller.dispose();
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
