@@ -82,7 +82,7 @@ final List<Event> nearbyEvents = [
     eventDate: DateTime.now().add(const Duration(days: 2)),
     image: 'https://picsum.photos/808',
     description: "The pretty reckless is an American rock band from New york city, Formed in 2009. The",
-    location: "The Cutting room",
+    location: "David Field",
     organizer: "Westfield Centre",
     price: 14,
   ),

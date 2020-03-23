@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_event_app/constant/color.dart';
 import 'package:flutter_event_app/constant/text_style.dart';

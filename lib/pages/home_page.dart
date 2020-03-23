@@ -5,6 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_event_app/constant/text_style.dart';
 import 'package:flutter_event_app/models/event_model.dart';
 import 'package:flutter_event_app/pages/event_detail_page.dart';
+import 'package:flutter_event_app/utils/app_utils.dart';
 import 'package:flutter_event_app/widgets/bottom_navigation_bar.dart';
 import 'package:flutter_event_app/widgets/home_bg_color.dart';
 import 'package:flutter_event_app/widgets/nearby_event_card.dart';
@@ -39,10 +40,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         },
       ),
     );
-  }
-
-  num scale(double offset, double returnMax, double maxOffset) {
-    return (offset * returnMax) / maxOffset;
   }
 
   @override
@@ -121,7 +118,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
   Widget buildUpComingEventList() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.only(left: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
