@@ -76,14 +76,14 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           HomeBackgroundColor(opacity),
           SingleChildScrollView(
             controller: scrollController,
-            padding: EdgeInsets.only(left: 16, top: 100),
+            padding: EdgeInsets.only(top: 100),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 buildSearchAppBar(),
-                UIHelper.verticalSpace(24),
+                UIHelper.verticalSpace(16),
                 buildUpComingEventList(),
-                UIHelper.verticalSpace(24),
+                UIHelper.verticalSpace(16),
                 buildNearbyConcerts(),
               ],
             ),
@@ -95,6 +95,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         currentIndex: _currentIndex,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
         child: Icon(FontAwesomeIcons.qrcode),
@@ -103,42 +104,53 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   }
 
   Widget buildSearchAppBar() {
-    return TextField(
-      style: TextStyle(color: Colors.white),
-      decoration: InputDecoration(
-        hintText: "Search...",
-        hintStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24),
-        border: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-        enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-        focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: TextField(
+        style: TextStyle(color: Colors.white),
+        decoration: InputDecoration(
+          hintText: "Search...",
+          hintStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24),
+          border: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+          enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+          focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+        ),
       ),
     );
   }
 
   Widget buildUpComingEventList() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text("Upcoming Events", style: headerStyle.copyWith(color: Colors.white)),
-        UIHelper.verticalSpace(16),
-        Container(
-          height: 250,
-          child: ListView.builder(
-            itemCount: upcomingEvents.length,
-            physics: BouncingScrollPhysics(),
-            scrollDirection: Axis.horizontal,
-            itemBuilder: (context, index) {
-              final event = upcomingEvents[index];
-              return UpComingEventCard(event, onTap: () => viewEventDetail(event));
-            },
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text("Upcoming Events", style: headerStyle.copyWith(color: Colors.white)),
+          UIHelper.verticalSpace(16),
+          Container(
+            height: 250,
+            child: ListView.builder(
+              itemCount: upcomingEvents.length,
+              physics: BouncingScrollPhysics(),
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                final event = upcomingEvents[index];
+                return UpComingEventCard(event, onTap: () => viewEventDetail(event));
+              },
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
   Widget buildNearbyConcerts() {
     return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+        color: Colors.white,
+      ),
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[

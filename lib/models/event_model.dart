@@ -68,4 +68,22 @@ final List<Event> nearbyEvents = [
     organizer: "Westfield Centre",
     price: 30,
   ),
+  Event(
+    name: "Rock Concert",
+    eventDate: DateTime.now().add(const Duration(days: 2)),
+    image: 'https://picsum.photos/806',
+    description: "The pretty reckless is an American rock band from New york city, Formed in 2009. The",
+    location: "The Cutting room",
+    organizer: "Westfield Centre",
+    price: 32,
+  ),
+  Event(
+    name: "Songwriters in Concert",
+    eventDate: DateTime.now().add(const Duration(days: 2)),
+    image: 'https://picsum.photos/808',
+    description: "The pretty reckless is an American rock band from New york city, Formed in 2009. The",
+    location: "The Cutting room",
+    organizer: "Westfield Centre",
+    price: 14,
+  ),
 ];
