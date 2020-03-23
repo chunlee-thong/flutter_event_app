@@ -1,3 +1,3 @@
-num scale(double offset, double returnMax, double maxOffset) {
+num offsetToOpacity(double offset, double returnMax, double maxOffset) {
   return (offset * returnMax) / maxOffset;
 }

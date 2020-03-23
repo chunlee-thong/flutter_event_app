@@ -52,7 +52,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       parent: opacityController,
     ));
     scrollController.addListener(() {
-      opacityController.value = scale(scrollController.offset, 1.0, scrollController.position.maxScrollExtent / 2);
+      opacityController.value = offsetToOpacity(scrollController.offset, 1.0, scrollController.position.maxScrollExtent / 2);
     });
     super.initState();
   }

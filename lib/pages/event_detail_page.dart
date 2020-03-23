@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_event_app/constant/color.dart';
 import 'package:flutter_event_app/constant/text_style.dart';
 import 'package:flutter_event_app/models/event_model.dart';
+import 'package:flutter_event_app/utils/app_utils.dart';
 import 'package:flutter_event_app/utils/datetime_utils.dart';
 import 'package:flutter_event_app/widgets/ui_helper.dart';
 
@@ -15,18 +16,30 @@ class EventDetailPage extends StatefulWidget {
   _EventDetailPageState createState() => _EventDetailPageState();
 }
 
-class _EventDetailPageState extends State<EventDetailPage> with SingleTickerProviderStateMixin {
+class _EventDetailPageState extends State<EventDetailPage> with TickerProviderStateMixin {
   Event event;
   AnimationController controller;
+  AnimationController imageScrollController;
+  ScrollController scrollController;
   Animation<double> scale;
+  Animation<double> imageScale;
   bool isFavorite = false;
   @override
   void initState() {
     event = widget.event;
     controller = AnimationController(vsync: this, duration: Duration(milliseconds: 300));
+    imageScrollController = AnimationController(vsync: this, duration: Duration(microseconds: 1));
+    scrollController = ScrollController()
+      ..addListener(() {
+        imageScrollController.value = offsetToOpacity(scrollController.offset, 1.0, scrollController.position.maxScrollExtent);
+      });
     scale = Tween(begin: 1.0, end: 0.5).animate(CurvedAnimation(
       curve: Curves.linear,
       parent: controller,
+    ));
+    imageScale = Tween(begin: 1.0, end: 0.0).animate(CurvedAnimation(
+      curve: Curves.linear,
+      parent: imageScrollController,
     ));
     super.initState();
   }
@@ -47,6 +60,7 @@ class _EventDetailPageState extends State<EventDetailPage> with SingleTickerProv
           body: Stack(
             children: <Widget>[
               SingleChildScrollView(
+                controller: scrollController,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -66,6 +80,7 @@ class _EventDetailPageState extends State<EventDetailPage> with SingleTickerProv
                           UIHelper.verticalSpace(24),
                           buildEventLocation(),
                           UIHelper.verticalSpace(100),
+                          //...List.generate(10, (index) => ListTile(title: Text("HI"))).toList(),
                         ],
                       ),
                     ),
@@ -86,6 +101,7 @@ class _EventDetailPageState extends State<EventDetailPage> with SingleTickerProv
   Widget buildHeaderImage() {
     double maxHeight = MediaQuery.of(context).size.height;
     double minimumScale = 0.8;
+    print(imageScrollController.value);
     return GestureDetector(
       onVerticalDragUpdate: (detail) {
         controller.value += detail.primaryDelta / maxHeight * 2;
@@ -102,14 +118,19 @@ class _EventDetailPageState extends State<EventDetailPage> with SingleTickerProv
         height: MediaQuery.of(context).size.height / 2.5,
         child: Stack(
           children: <Widget>[
-            Positioned.fill(
-              child: Hero(
-                tag: event.image,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.vertical(bottom: Radius.circular(32)),
-                  child: Image.network(
-                    event.image,
-                    fit: BoxFit.cover,
+            ScaleTransition(
+              scale: AlwaysStoppedAnimation<double>(1),
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height / 2.5 * imageScale.value,
+                child: Hero(
+                  tag: event.image,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.vertical(bottom: Radius.circular(32)),
+                    child: Image.network(
+                      event.image,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),
