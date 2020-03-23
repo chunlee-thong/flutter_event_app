@@ -17,11 +17,13 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMixin {
+class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   int _currentIndex = 0;
 
   ScrollController scrollController;
   AnimationController controller;
+  AnimationController opacityController;
+  Animation<double> opacity;
 
   void viewEventDetail(Event event) {
     Navigator.of(context).push(
@@ -39,10 +41,22 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     );
   }
 
+  num scale(double offset, double returnMax, double maxOffset) {
+    return (offset * returnMax) / maxOffset;
+  }
+
   @override
   void initState() {
     scrollController = ScrollController();
     controller = AnimationController(vsync: this, duration: Duration(seconds: 1))..forward();
+    opacityController = AnimationController(vsync: this, duration: Duration(microseconds: 1));
+    opacity = Tween(begin: 1.0, end: 0.0).animate(CurvedAnimation(
+      curve: Curves.linear,
+      parent: opacityController,
+    ));
+    scrollController.addListener(() {
+      opacityController.value = scale(scrollController.offset, 1.0, scrollController.position.maxScrollExtent / 2);
+    });
     super.initState();
   }
 
@@ -50,32 +64,31 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
   void dispose() {
     controller.dispose();
     scrollController.dispose();
+    opacityController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Stack(
-          children: <Widget>[
-            HomeBackgroundColor(),
-            Container(
-              margin: EdgeInsets.only(left: 16, top: 100),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  buildSearchAppBar(),
-                  UIHelper.verticalSpace(24),
-                  buildUpComingEventList(),
-                  UIHelper.verticalSpace(24),
-                  buildNearbyConcerts(),
-                ],
-              ),
+      body: Stack(
+        children: <Widget>[
+          HomeBackgroundColor(opacity),
+          SingleChildScrollView(
+            controller: scrollController,
+            padding: EdgeInsets.only(left: 16, top: 100),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                buildSearchAppBar(),
+                UIHelper.verticalSpace(24),
+                buildUpComingEventList(),
+                UIHelper.verticalSpace(24),
+                buildNearbyConcerts(),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
       bottomNavigationBar: HomePageButtonNavigationBar(
         onTap: (index) => setState(() => _currentIndex = index),
