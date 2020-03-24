@@ -23,6 +23,7 @@ class _EventDetailPageState extends State<EventDetailPage> with TickerProviderSt
   ScrollController scrollController;
   Animation<double> scale;
   Animation<double> appBarSlide;
+  double headerImageSize = 0;
   bool isFavorite = false;
   @override
   void initState() {
@@ -31,7 +32,7 @@ class _EventDetailPageState extends State<EventDetailPage> with TickerProviderSt
     bodyScrollAnimationController = AnimationController(vsync: this, duration: Duration(milliseconds: 300));
     scrollController = ScrollController()
       ..addListener(() {
-        if (scrollController.offset >= MediaQuery.of(context).size.height / 4) {
+        if (scrollController.offset >= headerImageSize / 2) {
           if (!bodyScrollAnimationController.isCompleted) bodyScrollAnimationController.forward();
         } else {
           if (bodyScrollAnimationController.isCompleted) bodyScrollAnimationController.reverse();
@@ -59,6 +60,7 @@ class _EventDetailPageState extends State<EventDetailPage> with TickerProviderSt
 
   @override
   Widget build(BuildContext context) {
+    headerImageSize = MediaQuery.of(context).size.height / 2.5;
     return ScaleTransition(
       scale: scale,
       child: BackdropFilter(
@@ -86,7 +88,8 @@ class _EventDetailPageState extends State<EventDetailPage> with TickerProviderSt
                           buildOrganizeInfo(),
                           UIHelper.verticalSpace(24),
                           buildEventLocation(),
-                          ...List.generate(10, (index) => ListTile(title: Text("Dummy content"))).toList(),
+                          UIHelper.verticalSpace(124),
+                          //...List.generate(10, (index) => ListTile(title: Text("Dummy content"))).toList(),
                         ],
                       ),
                     ),
@@ -131,28 +134,24 @@ class _EventDetailPageState extends State<EventDetailPage> with TickerProviderSt
           Navigator.of(context).pop();
         }
       },
-      child: Container(
-        width: double.infinity,
-        height: MediaQuery.of(context).size.height / 2.5,
-        child: Stack(
-          children: <Widget>[
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height / 2.5,
-              child: Hero(
-                tag: event.image,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.vertical(bottom: Radius.circular(32)),
-                  child: Image.network(
-                    event.image,
-                    fit: BoxFit.cover,
-                  ),
+      child: Stack(
+        children: <Widget>[
+          Container(
+            width: MediaQuery.of(context).size.width,
+            height: headerImageSize,
+            child: Hero(
+              tag: event.image,
+              child: ClipRRect(
+                borderRadius: BorderRadius.vertical(bottom: Radius.circular(32)),
+                child: Image.network(
+                  event.image,
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
-            buildHeaderButton(),
-          ],
-        ),
+          ),
+          buildHeaderButton(),
+        ],
       ),
     );
   }

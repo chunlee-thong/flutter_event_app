@@ -13,8 +13,8 @@ class Event {
 final List<Event> upcomingEvents = [
   Event(
     name: "The Pretty Reckless",
-    eventDate: DateTime.now().add(const Duration(days: 112)),
-    image: 'https://picsum.photos/900',
+    eventDate: DateTime.now().add(const Duration(days: 24)),
+    image: 'https://source.unsplash.com/800x600/?concert',
     description: "The pretty reckless is an American rock band from New york city, Formed in 2009. The",
     location: "Fairview Gospel Church",
     organizer: "Westfield Centre",
@@ -23,7 +23,7 @@ final List<Event> upcomingEvents = [
   Event(
     name: "Live Orchestra",
     eventDate: DateTime.now().add(const Duration(days: 33)),
-    image: 'https://picsum.photos/901',
+    image: 'https://source.unsplash.com/800x600/?band',
     description: "The pretty reckless is an American rock band from New york city, Formed in 2009. The",
     location: "David Geffen Hall",
     organizer: "Westfield Centre",
@@ -32,7 +32,7 @@ final List<Event> upcomingEvents = [
   Event(
     name: "Local Concert",
     eventDate: DateTime.now().add(const Duration(days: 12)),
-    image: 'https://picsum.photos/903',
+    image: 'https://source.unsplash.com/800x600/?music',
     description: "The pretty reckless is an American rock band from New york city, Formed in 2009. The",
     location: "The Cutting room",
     organizer: "Westfield Centre",
@@ -44,7 +44,7 @@ final List<Event> nearbyEvents = [
   Event(
     name: "The Pretty Reckless",
     eventDate: DateTime.now().add(const Duration(days: 1)),
-    image: 'https://picsum.photos/800',
+    image: 'https://source.unsplash.com/600x800/?concert',
     description: "The pretty reckless is an American rock band from New york city, Formed in 2009. The",
     location: "Fairview Gospel Church",
     organizer: "Westfield Centre",
@@ -53,7 +53,7 @@ final List<Event> nearbyEvents = [
   Event(
     name: "New Thread Quartet",
     eventDate: DateTime.now().add(const Duration(days: 4)),
-    image: 'https://picsum.photos/802',
+    image: 'https://source.unsplash.com/600x800/?live',
     description: "The pretty reckless is an American rock band from New york city, Formed in 2009. The",
     location: "David Geffen Hall",
     organizer: "Westfield Centre",
@@ -62,7 +62,7 @@ final List<Event> nearbyEvents = [
   Event(
     name: "Songwriters in Concert",
     eventDate: DateTime.now().add(const Duration(days: 2)),
-    image: 'https://picsum.photos/804',
+    image: 'https://source.unsplash.com/600x800/?orchestra',
     description: "The pretty reckless is an American rock band from New york city, Formed in 2009. The",
     location: "The Cutting room",
     organizer: "Westfield Centre",
@@ -70,8 +70,8 @@ final List<Event> nearbyEvents = [
   ),
   Event(
     name: "Rock Concert",
-    eventDate: DateTime.now().add(const Duration(days: 2)),
-    image: 'https://picsum.photos/806',
+    eventDate: DateTime.now().add(const Duration(days: 21)),
+    image: 'https://source.unsplash.com/600x800/?music',
     description: "The pretty reckless is an American rock band from New york city, Formed in 2009. The",
     location: "The Cutting room",
     organizer: "Westfield Centre",
@@ -79,8 +79,8 @@ final List<Event> nearbyEvents = [
   ),
   Event(
     name: "Songwriters in Concert",
-    eventDate: DateTime.now().add(const Duration(days: 2)),
-    image: 'https://picsum.photos/808',
+    eventDate: DateTime.now().add(const Duration(days: 16)),
+    image: 'https://source.unsplash.com/600x800/?rock_music',
     description: "The pretty reckless is an American rock band from New york city, Formed in 2009. The",
     location: "David Field",
     organizer: "Westfield Centre",
