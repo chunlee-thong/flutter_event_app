@@ -19,27 +19,33 @@ class EventDetailPage extends StatefulWidget {
 class _EventDetailPageState extends State<EventDetailPage> with TickerProviderStateMixin {
   Event event;
   AnimationController controller;
-  AnimationController imageScrollController;
+  AnimationController bodyScrollAnimationController;
   ScrollController scrollController;
   Animation<double> scale;
-  Animation<double> imageScale;
+  Animation<double> appBarSlide;
   bool isFavorite = false;
   @override
   void initState() {
     event = widget.event;
     controller = AnimationController(vsync: this, duration: Duration(milliseconds: 300));
-    imageScrollController = AnimationController(vsync: this, duration: Duration(microseconds: 1));
+    bodyScrollAnimationController = AnimationController(vsync: this, duration: Duration(milliseconds: 300));
     scrollController = ScrollController()
       ..addListener(() {
-        imageScrollController.value = offsetToOpacity(scrollController.offset, 1.0, scrollController.position.maxScrollExtent);
+        if (scrollController.offset >= MediaQuery.of(context).size.height / 4) {
+          if (!bodyScrollAnimationController.isCompleted) bodyScrollAnimationController.forward();
+        } else {
+          if (bodyScrollAnimationController.isCompleted) bodyScrollAnimationController.reverse();
+        }
       });
+
+    appBarSlide = Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+      curve: Curves.fastOutSlowIn,
+      parent: bodyScrollAnimationController,
+    ));
+
     scale = Tween(begin: 1.0, end: 0.5).animate(CurvedAnimation(
       curve: Curves.linear,
       parent: controller,
-    ));
-    imageScale = Tween(begin: 1.0, end: 0.0).animate(CurvedAnimation(
-      curve: Curves.linear,
-      parent: imageScrollController,
     ));
     super.initState();
   }
@@ -47,6 +53,7 @@ class _EventDetailPageState extends State<EventDetailPage> with TickerProviderSt
   @override
   void dispose() {
     controller.dispose();
+    bodyScrollAnimationController.dispose();
     super.dispose();
   }
 
@@ -79,8 +86,7 @@ class _EventDetailPageState extends State<EventDetailPage> with TickerProviderSt
                           buildOrganizeInfo(),
                           UIHelper.verticalSpace(24),
                           buildEventLocation(),
-                          UIHelper.verticalSpace(100),
-                          //...List.generate(10, (index) => ListTile(title: Text("HI"))).toList(),
+                          ...List.generate(10, (index) => ListTile(title: Text("Dummy content"))).toList(),
                         ],
                       ),
                     ),
@@ -91,6 +97,19 @@ class _EventDetailPageState extends State<EventDetailPage> with TickerProviderSt
                 child: buildPriceInfo(),
                 alignment: Alignment.bottomCenter,
               ),
+              AnimatedBuilder(
+                animation: appBarSlide,
+                builder: (context, snapshot) {
+                  return Transform.translate(
+                    offset: Offset(0.0, -1000 * (1 - appBarSlide.value)),
+                    child: Material(
+                      elevation: 2,
+                      color: Theme.of(context).primaryColor,
+                      child: buildHeaderButton(hasTitle: true),
+                    ),
+                  );
+                },
+              )
             ],
           ),
         ),
@@ -101,7 +120,6 @@ class _EventDetailPageState extends State<EventDetailPage> with TickerProviderSt
   Widget buildHeaderImage() {
     double maxHeight = MediaQuery.of(context).size.height;
     double minimumScale = 0.8;
-    print(imageScrollController.value);
     return GestureDetector(
       onVerticalDragUpdate: (detail) {
         controller.value += detail.primaryDelta / maxHeight * 2;
@@ -118,19 +136,16 @@ class _EventDetailPageState extends State<EventDetailPage> with TickerProviderSt
         height: MediaQuery.of(context).size.height / 2.5,
         child: Stack(
           children: <Widget>[
-            ScaleTransition(
-              scale: AlwaysStoppedAnimation<double>(1),
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height / 2.5 * imageScale.value,
-                child: Hero(
-                  tag: event.image,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.vertical(bottom: Radius.circular(32)),
-                    child: Image.network(
-                      event.image,
-                      fit: BoxFit.cover,
-                    ),
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height / 2.5,
+              child: Hero(
+                tag: event.image,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.vertical(bottom: Radius.circular(32)),
+                  child: Image.network(
+                    event.image,
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),
@@ -142,37 +157,47 @@ class _EventDetailPageState extends State<EventDetailPage> with TickerProviderSt
     );
   }
 
-  Widget buildHeaderButton() {
+  Widget buildHeaderButton({bool hasTitle = false}) {
     return SafeArea(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Card(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-            margin: EdgeInsets.only(left: 16, top: 16),
-            child: InkWell(
-              onTap: () => Navigator.of(context).pop(),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Icon(Icons.arrow_back_ios),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Card(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              elevation: 0,
+              child: InkWell(
+                onTap: () {
+                  if (bodyScrollAnimationController.isCompleted) bodyScrollAnimationController.reverse();
+                  Navigator.of(context).pop();
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Icon(
+                    Icons.arrow_back_ios,
+                    color: hasTitle ? Colors.white : Colors.black,
+                  ),
+                ),
               ),
+              color: hasTitle ? Theme.of(context).primaryColor : Colors.white,
             ),
-            color: Colors.white60,
-          ),
-          Card(
-            shape: CircleBorder(),
-            margin: EdgeInsets.only(right: 16, top: 16),
-            child: InkWell(
-              customBorder: CircleBorder(),
-              onTap: () => setState(() => isFavorite = !isFavorite),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Icon(isFavorite ? Icons.favorite : Icons.favorite_border, color: Colors.white),
+            if (hasTitle) Text(event.name, style: titleStyle.copyWith(color: Colors.white)),
+            Card(
+              shape: CircleBorder(),
+              elevation: 0,
+              child: InkWell(
+                customBorder: CircleBorder(),
+                onTap: () => setState(() => isFavorite = !isFavorite),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Icon(isFavorite ? Icons.favorite : Icons.favorite_border, color: Colors.white),
+                ),
               ),
+              color: Theme.of(context).primaryColor,
             ),
-            color: Theme.of(context).primaryColor.withOpacity(0.6),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

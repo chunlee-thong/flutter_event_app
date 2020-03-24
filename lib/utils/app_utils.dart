@@ -1,3 +1,3 @@
-num offsetToOpacity(double offset, double returnMax, double maxOffset) {
-  return (offset * returnMax) / maxOffset;
+num offsetToOpacity({double currentOffset, double returnMax = 1, double maxOffset}) {
+  return (currentOffset * returnMax) / maxOffset;
 }
