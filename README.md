@@ -7,6 +7,10 @@ Flutter event app UI design inspire from Dribble.
 
 - [Design from Dribble](https://dribbble.com/shots/10796226-Event-App)
 
+# App UI
+
+<a href="https://gph.is/g/aKAYwJ3"><img src="https://media.giphy.com/media/eHjbVCL1sqj2iTxdKS/giphy.gif" title="UI"/></a>
+
 # Screen
 
 HomePage             |  Detail     
