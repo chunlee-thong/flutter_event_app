@@ -1,11 +1,9 @@
-import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_event_app/constant/color.dart';
 import 'package:flutter_event_app/constant/text_style.dart';
 import 'package:flutter_event_app/models/event_model.dart';
-import 'package:flutter_event_app/utils/app_utils.dart';
 import 'package:flutter_event_app/utils/datetime_utils.dart';
 import 'package:flutter_event_app/widgets/ui_helper.dart';
 
@@ -16,7 +14,8 @@ class EventDetailPage extends StatefulWidget {
   _EventDetailPageState createState() => _EventDetailPageState();
 }
 
-class _EventDetailPageState extends State<EventDetailPage> with TickerProviderStateMixin {
+class _EventDetailPageState extends State<EventDetailPage>
+    with TickerProviderStateMixin {
   Event event;
   AnimationController controller;
   AnimationController bodyScrollAnimationController;
@@ -28,14 +27,18 @@ class _EventDetailPageState extends State<EventDetailPage> with TickerProviderSt
   @override
   void initState() {
     event = widget.event;
-    controller = AnimationController(vsync: this, duration: Duration(milliseconds: 300));
-    bodyScrollAnimationController = AnimationController(vsync: this, duration: Duration(milliseconds: 300));
+    controller =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 300));
+    bodyScrollAnimationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 300));
     scrollController = ScrollController()
       ..addListener(() {
         if (scrollController.offset >= headerImageSize / 2) {
-          if (!bodyScrollAnimationController.isCompleted) bodyScrollAnimationController.forward();
+          if (!bodyScrollAnimationController.isCompleted)
+            bodyScrollAnimationController.forward();
         } else {
-          if (bodyScrollAnimationController.isCompleted) bodyScrollAnimationController.reverse();
+          if (bodyScrollAnimationController.isCompleted)
+            bodyScrollAnimationController.reverse();
         }
       });
 
@@ -142,7 +145,8 @@ class _EventDetailPageState extends State<EventDetailPage> with TickerProviderSt
             child: Hero(
               tag: event.image,
               child: ClipRRect(
-                borderRadius: BorderRadius.vertical(bottom: Radius.circular(32)),
+                borderRadius:
+                    BorderRadius.vertical(bottom: Radius.circular(32)),
                 child: Image.network(
                   event.image,
                   fit: BoxFit.cover,
@@ -164,11 +168,13 @@ class _EventDetailPageState extends State<EventDetailPage> with TickerProviderSt
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Card(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16)),
               elevation: 0,
               child: InkWell(
                 onTap: () {
-                  if (bodyScrollAnimationController.isCompleted) bodyScrollAnimationController.reverse();
+                  if (bodyScrollAnimationController.isCompleted)
+                    bodyScrollAnimationController.reverse();
                   Navigator.of(context).pop();
                 },
                 child: Padding(
@@ -181,7 +187,8 @@ class _EventDetailPageState extends State<EventDetailPage> with TickerProviderSt
               ),
               color: hasTitle ? Theme.of(context).primaryColor : Colors.white,
             ),
-            if (hasTitle) Text(event.name, style: titleStyle.copyWith(color: Colors.white)),
+            if (hasTitle)
+              Text(event.name, style: titleStyle.copyWith(color: Colors.white)),
             Card(
               shape: CircleBorder(),
               elevation: 0,
@@ -190,7 +197,9 @@ class _EventDetailPageState extends State<EventDetailPage> with TickerProviderSt
                 onTap: () => setState(() => isFavorite = !isFavorite),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Icon(isFavorite ? Icons.favorite : Icons.favorite_border, color: Colors.white),
+                  child: Icon(
+                      isFavorite ? Icons.favorite : Icons.favorite_border,
+                      color: Colors.white),
                 ),
               ),
               color: Theme.of(context).primaryColor,
@@ -223,8 +232,10 @@ class _EventDetailPageState extends State<EventDetailPage> with TickerProviderSt
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Text("${DateTimeUtils.getMonth(event.eventDate)}", style: monthStyle),
-                Text("${DateTimeUtils.getDayOfMonth(event.eventDate)}", style: titleStyle),
+                Text("${DateTimeUtils.getMonth(event.eventDate)}",
+                    style: monthStyle),
+                Text("${DateTimeUtils.getDayOfMonth(event.eventDate)}",
+                    style: titleStyle),
               ],
             ),
           ),
@@ -233,7 +244,8 @@ class _EventDetailPageState extends State<EventDetailPage> with TickerProviderSt
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(DateTimeUtils.getDayOfWeek(event.eventDate), style: titleStyle),
+              Text(DateTimeUtils.getDayOfWeek(event.eventDate),
+                  style: titleStyle),
               UIHelper.verticalSpace(4),
               Text("10:00 - 12:00 PM", style: subtitleStyle),
             ],
@@ -241,11 +253,14 @@ class _EventDetailPageState extends State<EventDetailPage> with TickerProviderSt
           Spacer(),
           Container(
             padding: const EdgeInsets.all(2),
-            decoration: ShapeDecoration(shape: StadiumBorder(), color: primaryLight),
+            decoration:
+                ShapeDecoration(shape: StadiumBorder(), color: primaryLight),
             child: Row(
               children: <Widget>[
                 UIHelper.horizontalSpace(8),
-                Text("Add To Calendar", style: subtitleStyle.copyWith(color: Theme.of(context).primaryColor)),
+                Text("Add To Calendar",
+                    style: subtitleStyle.copyWith(
+                        color: Theme.of(context).primaryColor)),
                 FloatingActionButton(
                   mini: true,
                   onPressed: () {},
@@ -270,7 +285,9 @@ class _EventDetailPageState extends State<EventDetailPage> with TickerProviderSt
         InkWell(
           child: Text(
             "Read more...",
-            style: TextStyle(color: Theme.of(context).primaryColor, decoration: TextDecoration.underline),
+            style: TextStyle(
+                color: Theme.of(context).primaryColor,
+                decoration: TextDecoration.underline),
           ),
           onTap: () {},
         ),
@@ -295,7 +312,8 @@ class _EventDetailPageState extends State<EventDetailPage> with TickerProviderSt
         ),
         Spacer(),
         FlatButton(
-          child: Text("Follow", style: TextStyle(color: Theme.of(context).primaryColor)),
+          child: Text("Follow",
+              style: TextStyle(color: Theme.of(context).primaryColor)),
           onPressed: () {},
           shape: StadiumBorder(),
           color: primaryLight,
@@ -331,8 +349,13 @@ class _EventDetailPageState extends State<EventDetailPage> with TickerProviderSt
               RichText(
                 text: TextSpan(
                   children: [
-                    TextSpan(text: "\$${event.price}", style: titleStyle.copyWith(color: Theme.of(context).primaryColor)),
-                    TextSpan(text: "/per person", style: TextStyle(color: Colors.black)),
+                    TextSpan(
+                        text: "\$${event.price}",
+                        style: titleStyle.copyWith(
+                            color: Theme.of(context).primaryColor)),
+                    TextSpan(
+                        text: "/per person",
+                        style: TextStyle(color: Colors.black)),
                   ],
                 ),
               ),
@@ -346,7 +369,8 @@ class _EventDetailPageState extends State<EventDetailPage> with TickerProviderSt
             color: Theme.of(context).primaryColor,
             child: Text(
               "Get a Ticket",
-              style: titleStyle.copyWith(color: Colors.white, fontWeight: FontWeight.normal),
+              style: titleStyle.copyWith(
+                  color: Colors.white, fontWeight: FontWeight.normal),
             ),
           ),
         ],

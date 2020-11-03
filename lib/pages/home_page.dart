@@ -45,14 +45,19 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   @override
   void initState() {
     scrollController = ScrollController();
-    controller = AnimationController(vsync: this, duration: Duration(seconds: 1))..forward();
-    opacityController = AnimationController(vsync: this, duration: Duration(microseconds: 1));
+    controller =
+        AnimationController(vsync: this, duration: Duration(seconds: 1))
+          ..forward();
+    opacityController =
+        AnimationController(vsync: this, duration: Duration(microseconds: 1));
     opacity = Tween(begin: 1.0, end: 0.0).animate(CurvedAnimation(
       curve: Curves.linear,
       parent: opacityController,
     ));
     scrollController.addListener(() {
-      opacityController.value = offsetToOpacity(currentOffset: scrollController.offset, maxOffset: scrollController.position.maxScrollExtent / 2);
+      opacityController.value = offsetToOpacity(
+          currentOffset: scrollController.offset,
+          maxOffset: scrollController.position.maxScrollExtent / 2);
     });
     super.initState();
   }
@@ -107,10 +112,14 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         style: TextStyle(color: Colors.white),
         decoration: InputDecoration(
           hintText: "Search...",
-          hintStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24),
-          border: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-          enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-          focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+          hintStyle: TextStyle(
+              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24),
+          border:
+              UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+          enabledBorder:
+              UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+          focusedBorder:
+              UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
         ),
       ),
     );
@@ -122,7 +131,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text("Upcoming Events", style: headerStyle.copyWith(color: Colors.white)),
+          Text("Upcoming Events",
+              style: headerStyle.copyWith(color: Colors.white)),
           UIHelper.verticalSpace(16),
           Container(
             height: 250,
@@ -132,7 +142,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
                 final event = upcomingEvents[index];
-                return UpComingEventCard(event, onTap: () => viewEventDetail(event));
+                return UpComingEventCard(event,
+                    onTap: () => viewEventDetail(event));
               },
             ),
           ),
@@ -169,7 +180,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
               var animation = Tween<double>(begin: 800.0, end: 0.0).animate(
                 CurvedAnimation(
                   parent: controller,
-                  curve: Interval((1 / nearbyEvents.length) * index, 1.0, curve: Curves.decelerate),
+                  curve: Interval((1 / nearbyEvents.length) * index, 1.0,
+                      curve: Curves.decelerate),
                 ),
               );
               return AnimatedBuilder(
