@@ -1,55 +1,25 @@
 name: flutter_event_app
-description: A new Flutter project.
+description: Flutter event app UI design inspire from Dribble.
 
-version: 1.0.0+1
+version: 2.0.0
 
 environment:
-  sdk: ">=2.2.2 <3.0.0"
+  sdk: ">=2.14.2 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
-  cupertino_icons: ^0.1.2
-  font_awesome_flutter: ^8.7.0
-  intl: ^0.16.1
-  color_utils: ^0.0.1
+  cupertino_icons: ^1.0.4
+  font_awesome_flutter: ^9.2.0
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_lints: any
 
 flutter:
   uses-material-design: true
   assets:
     - assets/
-  
-  
-  
-  
-
-  
-  
-
-  
-  
-
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  

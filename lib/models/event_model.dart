@@ -7,7 +7,15 @@ class Event {
   String organizer;
   num price;
 
-  Event({this.eventDate, this.image, this.location, this.name, this.organizer, this.price, this.description});
+  Event({
+    required this.eventDate,
+    required this.image,
+    required this.location,
+    required this.name,
+    required this.organizer,
+    required this.price,
+    required this.description,
+  });
 }
 
 final List<Event> upcomingEvents = [

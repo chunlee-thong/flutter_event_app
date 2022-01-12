@@ -7,8 +7,8 @@ import 'package:flutter_event_app/widgets/ui_helper.dart';
 
 class NearbyEventCard extends StatelessWidget {
   final Event event;
-  final Function onTap;
-  NearbyEventCard(this.event, {this.onTap});
+  final VoidCallback onTap;
+  const NearbyEventCard({Key? key, required this.event, required this.onTap}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(

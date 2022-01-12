@@ -9,36 +9,31 @@ import 'package:flutter_event_app/widgets/ui_helper.dart';
 
 class EventDetailPage extends StatefulWidget {
   final Event event;
-  EventDetailPage(this.event);
+  const EventDetailPage(this.event, {Key? key}) : super(key: key);
   @override
   _EventDetailPageState createState() => _EventDetailPageState();
 }
 
-class _EventDetailPageState extends State<EventDetailPage>
-    with TickerProviderStateMixin {
-  Event event;
-  AnimationController controller;
-  AnimationController bodyScrollAnimationController;
-  ScrollController scrollController;
-  Animation<double> scale;
-  Animation<double> appBarSlide;
+class _EventDetailPageState extends State<EventDetailPage> with TickerProviderStateMixin {
+  late Event event;
+  late AnimationController controller;
+  late AnimationController bodyScrollAnimationController;
+  late ScrollController scrollController;
+  late Animation<double> scale;
+  late Animation<double> appBarSlide;
   double headerImageSize = 0;
   bool isFavorite = false;
   @override
   void initState() {
     event = widget.event;
-    controller =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 300));
-    bodyScrollAnimationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 300));
+    controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 300));
+    bodyScrollAnimationController = AnimationController(vsync: this, duration: const Duration(milliseconds: 300));
     scrollController = ScrollController()
       ..addListener(() {
         if (scrollController.offset >= headerImageSize / 2) {
-          if (!bodyScrollAnimationController.isCompleted)
-            bodyScrollAnimationController.forward();
+          if (!bodyScrollAnimationController.isCompleted) bodyScrollAnimationController.forward();
         } else {
-          if (bodyScrollAnimationController.isCompleted)
-            bodyScrollAnimationController.reverse();
+          if (bodyScrollAnimationController.isCompleted) bodyScrollAnimationController.reverse();
         }
       });
 
@@ -128,7 +123,7 @@ class _EventDetailPageState extends State<EventDetailPage>
     double minimumScale = 0.8;
     return GestureDetector(
       onVerticalDragUpdate: (detail) {
-        controller.value += detail.primaryDelta / maxHeight * 2;
+        controller.value += detail.primaryDelta! / maxHeight * 2;
       },
       onVerticalDragEnd: (detail) {
         if (scale.value > minimumScale) {
@@ -139,14 +134,13 @@ class _EventDetailPageState extends State<EventDetailPage>
       },
       child: Stack(
         children: <Widget>[
-          Container(
+          SizedBox(
             width: MediaQuery.of(context).size.width,
             height: headerImageSize,
             child: Hero(
               tag: event.image,
               child: ClipRRect(
-                borderRadius:
-                    BorderRadius.vertical(bottom: Radius.circular(32)),
+                borderRadius: const BorderRadius.vertical(bottom: Radius.circular(32)),
                 child: Image.network(
                   event.image,
                   fit: BoxFit.cover,
@@ -168,13 +162,12 @@ class _EventDetailPageState extends State<EventDetailPage>
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Card(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
               elevation: 0,
+              margin: const EdgeInsets.all(0),
               child: InkWell(
                 onTap: () {
-                  if (bodyScrollAnimationController.isCompleted)
-                    bodyScrollAnimationController.reverse();
+                  if (bodyScrollAnimationController.isCompleted) bodyScrollAnimationController.reverse();
                   Navigator.of(context).pop();
                 },
                 child: Padding(
@@ -187,19 +180,16 @@ class _EventDetailPageState extends State<EventDetailPage>
               ),
               color: hasTitle ? Theme.of(context).primaryColor : Colors.white,
             ),
-            if (hasTitle)
-              Text(event.name, style: titleStyle.copyWith(color: Colors.white)),
+            if (hasTitle) Text(event.name, style: titleStyle.copyWith(color: Colors.white)),
             Card(
-              shape: CircleBorder(),
+              shape: const CircleBorder(),
               elevation: 0,
               child: InkWell(
-                customBorder: CircleBorder(),
+                customBorder: const CircleBorder(),
                 onTap: () => setState(() => isFavorite = !isFavorite),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Icon(
-                      isFavorite ? Icons.favorite : Icons.favorite_border,
-                      color: Colors.white),
+                  child: Icon(isFavorite ? Icons.favorite : Icons.favorite_border, color: Colors.white),
                 ),
               ),
               color: Theme.of(context).primaryColor,
@@ -211,66 +201,56 @@ class _EventDetailPageState extends State<EventDetailPage>
   }
 
   Widget buildEventTitle() {
-    return Container(
-      child: Text(
-        event.name,
-        style: headerStyle.copyWith(fontSize: 32),
-      ),
+    return Text(
+      event.name,
+      style: headerStyle.copyWith(fontSize: 32),
     );
   }
 
   Widget buildEventDate() {
-    return Container(
-      child: Row(
-        children: <Widget>[
-          Container(
-            decoration: BoxDecoration(
-              color: primaryLight,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Text("${DateTimeUtils.getMonth(event.eventDate)}",
-                    style: monthStyle),
-                Text("${DateTimeUtils.getDayOfMonth(event.eventDate)}",
-                    style: titleStyle),
-              ],
-            ),
+    return Row(
+      children: <Widget>[
+        Container(
+          decoration: BoxDecoration(
+            color: primaryLight,
+            borderRadius: BorderRadius.circular(8),
           ),
-          UIHelper.horizontalSpace(12),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Text(DateTimeUtils.getDayOfWeek(event.eventDate),
-                  style: titleStyle),
-              UIHelper.verticalSpace(4),
-              Text("10:00 - 12:00 PM", style: subtitleStyle),
+              Text(DateTimeUtils.getMonth(event.eventDate), style: monthStyle),
+              Text(DateTimeUtils.getDayOfMonth(event.eventDate), style: titleStyle),
             ],
           ),
-          Spacer(),
-          Container(
-            padding: const EdgeInsets.all(2),
-            decoration:
-                ShapeDecoration(shape: StadiumBorder(), color: primaryLight),
-            child: Row(
-              children: <Widget>[
-                UIHelper.horizontalSpace(8),
-                Text("Add To Calendar",
-                    style: subtitleStyle.copyWith(
-                        color: Theme.of(context).primaryColor)),
-                FloatingActionButton(
-                  mini: true,
-                  onPressed: () {},
-                  child: Icon(Icons.add),
-                ),
-              ],
-            ),
+        ),
+        UIHelper.horizontalSpace(12),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(DateTimeUtils.getDayOfWeek(event.eventDate), style: titleStyle),
+            UIHelper.verticalSpace(4),
+            const Text("10:00 - 12:00 PM", style: subtitleStyle),
+          ],
+        ),
+        const Spacer(),
+        Container(
+          padding: const EdgeInsets.all(2),
+          decoration: const ShapeDecoration(shape: StadiumBorder(), color: primaryLight),
+          child: Row(
+            children: <Widget>[
+              UIHelper.horizontalSpace(8),
+              Text("Add To Calendar", style: subtitleStyle.copyWith(color: Theme.of(context).primaryColor)),
+              FloatingActionButton(
+                mini: true,
+                onPressed: () {},
+                child: const Icon(Icons.add),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -278,16 +258,14 @@ class _EventDetailPageState extends State<EventDetailPage>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text("About", style: headerStyle),
+        const Text("About", style: headerStyle),
         UIHelper.verticalSpace(),
         Text(event.description, style: subtitleStyle),
         UIHelper.verticalSpace(8),
         InkWell(
           child: Text(
             "Read more...",
-            style: TextStyle(
-                color: Theme.of(context).primaryColor,
-                decoration: TextDecoration.underline),
+            style: TextStyle(color: Theme.of(context).primaryColor, decoration: TextDecoration.underline),
           ),
           onTap: () {},
         ),
@@ -307,16 +285,17 @@ class _EventDetailPageState extends State<EventDetailPage>
           children: <Widget>[
             Text(event.organizer, style: titleStyle),
             UIHelper.verticalSpace(4),
-            Text("Organizer", style: subtitleStyle),
+            const Text("Organizer", style: subtitleStyle),
           ],
         ),
-        Spacer(),
-        FlatButton(
-          child: Text("Follow",
-              style: TextStyle(color: Theme.of(context).primaryColor)),
+        const Spacer(),
+        TextButton(
+          child: Text("Follow", style: TextStyle(color: Theme.of(context).primaryColor)),
           onPressed: () {},
-          shape: StadiumBorder(),
-          color: primaryLight,
+          style: TextButton.styleFrom(
+            shape: const StadiumBorder(),
+            primary: primaryLight,
+          ),
         )
       ],
     );
@@ -335,7 +314,7 @@ class _EventDetailPageState extends State<EventDetailPage>
 
   Widget buildPriceInfo() {
     return Container(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       color: Colors.white,
       width: MediaQuery.of(context).size.width,
       child: Row(
@@ -344,33 +323,30 @@ class _EventDetailPageState extends State<EventDetailPage>
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Text("Price", style: subtitleStyle),
+              const Text("Price", style: subtitleStyle),
               UIHelper.verticalSpace(8),
               RichText(
                 text: TextSpan(
                   children: [
                     TextSpan(
-                        text: "\$${event.price}",
-                        style: titleStyle.copyWith(
-                            color: Theme.of(context).primaryColor)),
-                    TextSpan(
-                        text: "/per person",
-                        style: TextStyle(color: Colors.black)),
+                        text: "\$${event.price}", style: titleStyle.copyWith(color: Theme.of(context).primaryColor)),
+                    const TextSpan(text: "/per person", style: TextStyle(color: Colors.black)),
                   ],
                 ),
               ),
             ],
           ),
-          Spacer(),
-          RaisedButton(
+          const Spacer(),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              shape: const StadiumBorder(),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              primary: Theme.of(context).primaryColor,
+            ),
             onPressed: () {},
-            shape: StadiumBorder(),
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-            color: Theme.of(context).primaryColor,
             child: Text(
               "Get a Ticket",
-              style: titleStyle.copyWith(
-                  color: Colors.white, fontWeight: FontWeight.normal),
+              style: titleStyle.copyWith(color: Colors.white, fontWeight: FontWeight.normal),
             ),
           ),
         ],
