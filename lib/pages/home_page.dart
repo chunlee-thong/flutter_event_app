@@ -20,9 +20,15 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   int _currentIndex = 0;
 
-  late ScrollController scrollController;
-  late AnimationController controller;
-  late AnimationController opacityController;
+  late ScrollController scrollController = ScrollController();
+  late AnimationController controller = AnimationController(
+    vsync: this,
+    duration: const Duration(seconds: 1),
+  )..forward();
+  late AnimationController opacityController = AnimationController(
+    vsync: this,
+    duration: const Duration(microseconds: 1),
+  );
   late Animation<double> opacity;
 
   void viewEventDetail(Event event) {
@@ -43,9 +49,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    scrollController = ScrollController();
-    controller = AnimationController(vsync: this, duration: const Duration(seconds: 1))..forward();
-    opacityController = AnimationController(vsync: this, duration: const Duration(microseconds: 1));
     opacity = Tween(begin: 1.0, end: 0.0).animate(CurvedAnimation(
       curve: Curves.linear,
       parent: opacityController,
@@ -101,6 +104,9 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   }
 
   Widget buildSearchAppBar() {
+    const inputBorder = UnderlineInputBorder(
+      borderSide: BorderSide(color: Colors.white),
+    );
     return const Padding(
       padding: EdgeInsets.symmetric(horizontal: 16),
       child: TextField(
@@ -108,9 +114,9 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         decoration: InputDecoration(
           hintText: "Search...",
           hintStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24),
-          border: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-          enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-          focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+          border: inputBorder,
+          enabledBorder: inputBorder,
+          focusedBorder: inputBorder,
         ),
       ),
     );
@@ -122,7 +128,10 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text("Upcoming Events", style: headerStyle.copyWith(color: Colors.white)),
+          Text(
+            "Upcoming Events",
+            style: headerStyle.copyWith(color: Colors.white),
+          ),
           UIHelper.verticalSpace(16),
           SizedBox(
             height: 250,
